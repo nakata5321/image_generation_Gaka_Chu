@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from PIL import Image, ImageFont, ImageDraw
+from googletrans import Translator
 import rospkg
 import rospy
 
@@ -25,14 +26,23 @@ def create_image(data: str, dirpath: str) -> str:
     return path_to_pic
 
 
+def translate(word: str, language: str = 'ja') -> str:
+    translator = Translator()
+    trans = translator.translate(word, dest=language)
+    return trans.text
+
+
 def main() -> None:
     # init ros node
     rospy.init_node("image_generation", anonymous=True, disable_signals=True)
     rospack = rospkg.RosPack()
     dirpath = rospack.get_path("image_generation")
 
+    # translate word
+    tr_word = translate("Hello World!")
+
     # create image
-    create_image("Hello World!", dirpath)
+    create_image(tr_word, dirpath)
 
 
 if __name__ == "__main__":
