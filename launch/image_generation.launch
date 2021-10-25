@@ -1,0 +1,6 @@
+<launch>
+	<arg name="dir_path" default="$(find image_generation)" />
+    <node  name="Image_generation" pkg="image_generation" type="main.py" output="screen" respawn="true">
+        <param name="dir_path" value="$(arg dir_path)" />
+    </node>
+</launch>
