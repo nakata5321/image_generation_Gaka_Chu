@@ -7,22 +7,27 @@ from std_msgs.msg import String
 import rospy
 
 
-def create_image(data: str, dirpath: str) -> None:
+def create_image(data: str, dirpath: str, name: str = None) -> None:
     """
     function create image and insert text on it
 
     -----
-    :param dirpath: path to the folder with ROS package
     :param data: text to insert
+    :param dirpath: path to the folder with ROS package
+    :param name: give name of image file
     """
+    # check the name exist
+    if name is None:
+        name = "result"
+
     # create empty image
     img = Image.new("RGB", (1024, 1024), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
     # use a truetype font
-    font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 100)
+    font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 350)
     draw.text((512, 512), data, (0, 0, 0), font=font, anchor="mm")
     img.show()
-    path_to_pic = dirpath + "result" + data + ".png"
+    path_to_pic = dirpath + '/' + name + ".png"
     img.save(path_to_pic)
     rospy.loginfo(f"path to picture is: {path_to_pic}")
     pub_run.publish(path_to_pic)
@@ -41,8 +46,11 @@ def translate(data: String) -> None:
     trans = translator.translate(data.data, dest='ja')
     rospy.loginfo(f"translation is {trans.text}")
 
+    # translate to English, to create image file name
+    im_name = translator.translate(data.data, dest='en')
+
     rospy.loginfo("creating picture with word")
-    create_image(trans.text, dir_path)
+    create_image(trans.text, dir_path, im_name.text)
 
 
 def get_word(req: None) -> str:
