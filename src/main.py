@@ -23,8 +23,18 @@ def create_image(data: str, dirpath: str, name: str = None) -> None:
     # create empty image
     img = Image.new("RGB", (1024, 1024), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
-    # use a truetype font
-    font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 350)
+    # use a truetype font with different size
+    font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 120)
+    if len(data) == 1:
+        font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 900)
+    if len(data) == 2:
+        font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 510)
+    if len(data) == 3:
+        font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 450)
+    if len(data) == 4:
+        font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 260)
+    if len(data) == 5:
+        font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 200)
     draw.text((512, 512), data, (0, 0, 0), font=font, anchor="mm")
     img.show()
     path_to_pic = dirpath + '/' + name + ".png"
