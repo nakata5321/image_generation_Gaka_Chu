@@ -37,7 +37,7 @@ def create_image(data: str, dirpath: str, name: str = None) -> None:
         font = ImageFont.truetype(dirpath + "/font/usual_font.ttc", 200)
     draw.text((512, 512), data, (0, 0, 0), font=font, anchor="mm")
     img.show()
-    path_to_pic = dirpath + '/' + name + ".png"
+    path_to_pic = dirpath + "/" + name + ".png"
     img.save(path_to_pic)
     rospy.loginfo(f"path to picture is: {path_to_pic}")
     pub_run.publish(path_to_pic)
@@ -53,11 +53,11 @@ def translate(data: String) -> None:
     rospy.loginfo(f"translate word to Japanese")
     dir_path = rospy.get_param("~dir_path")
     translator = Translator()
-    trans = translator.translate(data.data, dest='ja')
+    trans = translator.translate(data.data, dest="ja")
     rospy.loginfo(f"translation is {trans.text}")
 
     # translate to English, to create image file name
-    im_name = translator.translate(data.data, dest='en')
+    im_name = translator.translate(data.data, dest="en")
 
     rospy.loginfo("creating picture with word")
     create_image(trans.text, dir_path, im_name.text)
@@ -78,10 +78,10 @@ def get_word(req: None) -> str:
 if __name__ == "__main__":
     rospy.init_node("image_generation", anonymous=True, disable_signals=True)
     rospy.loginfo("node initializing")
-    pub_run = rospy.Publisher('run', String, queue_size=1)
-    pub_gen = rospy.Publisher('/word_for_gakachu', String, queue_size=1)
+    pub_run = rospy.Publisher("run", String, queue_size=1)
+    pub_gen = rospy.Publisher("/word_for_gakachu", String, queue_size=1)
     rospy.Subscriber("/word_for_gakachu", String, translate)
     rospy.loginfo("node is up")
-    generate_image_service = rospy.Service('generate_image', ImageGenerate, get_word)
+    generate_image_service = rospy.Service("generate_image", ImageGenerate, get_word)
     rospy.loginfo("if you want to generate word, call 'generate_image' service")
     rospy.spin()
